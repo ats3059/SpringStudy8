@@ -2,6 +2,7 @@ package hello.exception;
 
 import hello.exception.filter.LogFilter;
 import hello.exception.interceptor.LogInterceptor;
+import hello.exception.interceptor.TestInterceptor;
 import hello.exception.resolver.MyHandlerExceptionResolver;
 import hello.exception.resolver.UserHandlerExceptionResolver;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -23,8 +24,12 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LogInterceptor())
                 .addPathPatterns("/**")
+                .order(1)
                 .excludePathPatterns("/css/**","*.ico","/error","/error-page/**"); // 오류 페이지 경로를 넣어버려서 인터셉터가 동작 안하도록 한다
-
+        registry.addInterceptor(new TestInterceptor())
+                .addPathPatterns("/test")
+                .order(2)
+                .excludePathPatterns("/css/**","*.ico","/error","/error-page/**");
     }
 
     @Override
